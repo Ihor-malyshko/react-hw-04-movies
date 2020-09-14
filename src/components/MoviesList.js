@@ -1,29 +1,22 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import routes from '../routes';
-import themoviedbApi from '../services/themoviedbApi';
 
 export default class MoviesList extends Component {
-  state = {
-    movies: [],
-  };
-
-  componentDidMount() {
-    themoviedbApi.fetchShowTrending().then(movies => this.setState({ movies }));
-  }
-
-  componentDidUpdate() {
-    console.log(this.state.movies);
-    console.log(this.props);
-  }
-
   render() {
-    const { movies } = this.state;
+    const { items } = this.props;
     return (
       <ul>
-        {movies.map(({ id, title }) => (
+        {items.map(({ id, title }) => (
           <li key={id}>
-            <Link to={`${routes.movies}/${id}`}>{title}</Link>
+            <Link
+              to={{
+                pathname: `${routes.moviesDetails}${id}`,
+                state: { from: this.props.location },
+              }}
+            >
+              {title}
+            </Link>
           </li>
         ))}
       </ul>
