@@ -4,15 +4,15 @@ import routes from '../routes';
 
 export default class MoviesList extends Component {
   render() {
-    const { items } = this.props;
+    const { items, location } = this.props;
     return (
       <ul>
         {items.map(({ id, title }) => (
           <li key={id}>
             <Link
               to={{
-                pathname: `${routes.moviesDetails}${id}`,
-                state: { from: this.props.location },
+                pathname: `${routes.movies}/${id}`,
+                state: { from: location },
               }}
             >
               {title}

@@ -1,11 +1,9 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
 
-// import MoviesList from '../components/MoviesList';
+import MoviesList from '../components/MoviesList';
 import MyLoader from '../components/MyLoader';
 import Notification from '../components/Notification';
 import themoviedbApi from '../services/themoviedbApi';
-import routes from '../routes';
 
 export default class HomePage extends Component {
   state = {
@@ -34,21 +32,7 @@ export default class HomePage extends Component {
           />
         )}
         {loading && <MyLoader />}
-        {/* <MoviesList items={movies} /> */}
-        <ul>
-          {movies.map(({ id, title }) => (
-            <li key={id}>
-              <Link
-                to={{
-                  pathname: `${routes.moviesDetails}${id}`,
-                  state: { from: this.props.location },
-                }}
-              >
-                {title}
-              </Link>
-            </li>
-          ))}
-        </ul>
+        <MoviesList items={movies} location={this.props.location} />
       </div>
     );
   }

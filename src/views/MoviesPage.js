@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
 import Searchbar from '../components/searchbar/Searchbar';
-// import MoviesList from '../components/MoviesList';
+import MoviesList from '../components/MoviesList';
 import MyLoader from '../components/MyLoader';
 import Notification from '../components/Notification';
 import getQueryParams from '../utils/get-query-params';
@@ -47,7 +46,6 @@ export default class MoviesPage extends Component {
 
   render() {
     const { movies, loading, error } = this.state;
-    const { match } = this.props;
     return (
       <>
         <Searchbar onSubmit={this.handleChangeQuery} />
@@ -57,22 +55,8 @@ export default class MoviesPage extends Component {
           />
         )}
         {loading && <MyLoader />}
-        {/* {movies.length > 0 && <MoviesList items={movies} />} */}
         {movies.length > 0 && (
-          <ul>
-            {movies.map(({ id, title }) => (
-              <li key={id}>
-                <Link
-                  to={{
-                    pathname: `${match.url}/${id}`,
-                    state: { from: this.props.location },
-                  }}
-                >
-                  {title}
-                </Link>
-              </li>
-            ))}
-          </ul>
+          <MoviesList items={movies} location={this.props.location} />
         )}
       </>
     );

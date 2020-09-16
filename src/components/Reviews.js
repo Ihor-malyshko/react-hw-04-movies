@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import getMovieId from '../utils/get-movies-id';
 import themoviedbApi from '../services/themoviedbApi';
 
 export default class Reviews extends Component {
@@ -11,7 +10,7 @@ export default class Reviews extends Component {
 
   componentDidMount() {
     this.setState({ loading: true });
-    const showId = getMovieId(this.props.location.pathname).slice(0, -8);
+    const showId = this.props.match.params.moviesId;
     themoviedbApi
       .fetchShowReviews(showId)
       .then(reviews => this.setState({ reviews }))

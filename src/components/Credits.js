@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import getMovieId from '../utils/get-movies-id';
+// import getMovieId from '../utils/get-movies-id';
 import themoviedbApi from '../services/themoviedbApi';
 
 export default class Credits extends Component {
@@ -11,13 +11,14 @@ export default class Credits extends Component {
 
   componentDidMount() {
     this.setState({ loading: true });
-    const showId = getMovieId(this.props.location.pathname).slice(0, -5);
+    const showId = this.props.match.params.moviesId;
     themoviedbApi
       .fetchShowCredits(showId)
       .then(credits => this.setState({ credits }))
       .catch(error => this.setState({ error }))
       .finally(() => this.setState({ loading: false }));
   }
+
   render() {
     const { credits } = this.state;
     return (

@@ -3,7 +3,6 @@ import { Route, Link } from 'react-router-dom';
 
 import MyLoader from '../components/MyLoader';
 import Notification from '../components/Notification';
-import getMovieId from '../utils/get-movies-id';
 import themoviedbApi from '../services/themoviedbApi';
 import routes from '../routes';
 import Credits from '../components/Credits';
@@ -14,27 +13,29 @@ export default class MovieDetailsPage extends Component {
     movie: [],
     loading: false,
     error: null,
-    // from: null,
+    from: routes.homePage,
   };
 
   componentDidMount() {
     this.setState({ loading: true });
-    const showId = getMovieId(this.props.location.pathname);
+    const showId = this.props.match.params.moviesId;
     themoviedbApi
       .fetchShowDetails(showId)
       .then(movie => this.setState({ movie }))
       .catch(error => this.setState({ error }))
       .finally(() => this.setState({ loading: false }));
+    if (this.props.location.state && this.props.location.state.from) {
+      this.setState({ from: this.props.location.state.from });
+    }
   }
 
   handleGoBack = () => {
-    const { state } = this.props.location;
-
-    if (state && state.from) {
-      return this.props.history.push(state.from);
+    console.log('this.state.from', this.state.from);
+    if (this.state && this.state.from) {
+      console.log('if');
+      return this.props.history.push(this.state.from);
     }
-
-    this.props.history.push(routes.movies);
+    this.props.history.push(routes.homePage);
   };
 
   render() {
@@ -49,7 +50,7 @@ export default class MovieDetailsPage extends Component {
         )}
         {loading && <MyLoader />}
         <button type="button" onClick={this.handleGoBack}>
-          Go back
+          {this.state.from !== routes.homePage ? 'Go back' : 'Go home'}
         </button>
         <h3>{movie.title}</h3>
         {movie.poster_path && (
@@ -58,10 +59,11 @@ export default class MovieDetailsPage extends Component {
             src={`https://image.tmdb.org/t/p/w300${movie.poster_path}`}
           />
         )}
-        <Link to={`${this.props.match.url}/${movie.id}/cast`}>Casts</Link>
-        <Link to={`${this.props.match.url}/${movie.id}/reviews`}>Reviews</Link>
-        <Route path={`${match.path}${movie.id}/cast`} component={Credits} />
-        <Route path={`${match.path}${movie.id}/reviews`} component={Reviews} />
+
+        <Link to={`${this.props.match.url}/cast`}>Casts</Link>
+        <Link to={`${this.props.match.url}/reviews`}>Reviews</Link>
+        <Route path={`${match.path}/cast`} component={Credits} />
+        <Route path={`${match.path}/reviews`} component={Reviews} />
       </>
     );
   }
